@@ -1,0 +1,350 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-user-authentication-system-with-internet-identity-integration-for-signup-and-login",
+      "featureTitle": "Implement user authentication system with Internet Identity integration for signup and login",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/LoginButton.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-user-profile-system-with-profile-creation-editing-and-viewing-capabilities",
+      "featureTitle": "Create user profile system with profile creation, editing, and viewing capabilities",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ProfileSetupModal.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-video-upload-functionality-supporting-mp4-and-mov-formats-with-file-validation-and-storage-in-backend",
+      "featureTitle": "Implement video upload functionality supporting MP4 and MOV formats with file validation and storage in backend",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/UploadPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-video-streaming-interface-with-playback-controls-and-video-player-component",
+      "featureTitle": "Build video streaming interface with playback controls and video player component",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/VideoPlayer.tsx",
+        "frontend/src/pages/VideoPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-like-system-allowing-users-to-like-videos-with-like-count-display-and-toggle-functionality",
+      "featureTitle": "Implement like system allowing users to like videos with like count display and toggle functionality",
+      "files": [
+        "frontend/src/components/LikeButton.tsx",
+        "frontend/src/pages/VideoPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-comment-system-with-comment-creation-display-and-deletion-functionality-for-videos",
+      "featureTitle": "Create comment system with comment creation, display, and deletion functionality for videos",
+      "files": [
+        "frontend/src/components/CommentSection.tsx",
+        "frontend/src/pages/VideoPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-channel-subscription-system-allowing-users-to-subscribe-to-other-users-and-view-subscriber-counts",
+      "featureTitle": "Implement channel subscription system allowing users to subscribe to other users and view subscriber counts",
+      "files": [
+        "frontend/src/components/SubscribeButton.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-video-categorization-system-with-predefined-categories-and-category-based-filtering",
+      "featureTitle": "Create video categorization system with predefined categories and category-based filtering",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/CategoryNav.tsx",
+        "frontend/src/pages/CategoryPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-search-functionality-with-title-and-description-matching-for-finding-videos",
+      "featureTitle": "Implement search functionality with title and description matching for finding videos",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/SearchResultsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-trending-section-displaying-videos-ranked-by-view-count-and-engagement-metrics",
+      "featureTitle": "Build trending section displaying videos ranked by view count and engagement metrics",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/TrendingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-watch-history-system-tracking-videos-viewed-by-each-user-with-timestamp",
+      "featureTitle": "Implement watch history system tracking videos viewed by each user with timestamp",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/HistoryPage.tsx",
+        "frontend/src/pages/VideoPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-playlist-creation-and-management-system-allowing-users-to-organize-videos-into-custom-playlists",
+      "featureTitle": "Create playlist creation and management system allowing users to organize videos into custom playlists",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/PlaylistPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-admin-dashboard-with-user-management-video-moderation-and-platform-statistics",
+      "featureTitle": "Build admin dashboard with user management, video moderation, and platform statistics",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/AdminDashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-content-report-system-allowing-users-to-flag-inappropriate-videos-with-report-reasons",
+      "featureTitle": "Implement content report system allowing users to flag inappropriate videos with report reasons",
+      "files": [
+        "frontend/src/components/ReportModal.tsx",
+        "frontend/src/components/ReportVideoButton.tsx",
+        "frontend/src/pages/VideoPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-content-moderation-system-with-admin-review-interface-for-reported-videos-and-content-removal-capabilities",
+      "featureTitle": "Create content moderation system with admin review interface for reported videos and content removal capabilities",
+      "files": [
+        "frontend/src/components/ModerationQueue.tsx",
+        "frontend/src/pages/AdminDashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-design-and-implement-a-cohesive-visual-theme-with-modern-cinematic-styling-featuring-dark-backgrounds-gradient-accents-and-sleek-typography-optimized-for-video-content-presentation",
+      "featureTitle": "Design and implement a cohesive visual theme with modern, cinematic styling featuring dark backgrounds, gradient accents, and sleek typography optimized for video content presentation",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/VideoCard.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

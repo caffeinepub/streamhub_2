@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Modern video streaming and uploading website with comprehensive features including user management, video upload/streaming with adaptive quality, social features (like/comment/share/subscribe), search, trending, playlists, admin dashboard, content moderation, live streaming, AI features (captions, recommendations), compression, monetization, and creator analytics",
+  "architectural_notes": [
+    "Scalable architecture designed for millions of concurrent users",
+    "CDN integration required for global video delivery",
+    "Cloud hosting infrastructure (AWS/GCP/Azure)",
+    "Secure video storage with encryption",
+    "Low-latency streaming with minimal buffering",
+    "Microservices architecture for independent scaling",
+    "Message queue system for async video processing",
+    "Distributed caching layer (Redis/Memcached)",
+    "Multi-region database replication",
+    "Object storage for video files (S3/GCS/Azure Blob)"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Hero banner image with cinematic video streaming theme featuring film reels and play button iconography (hero-banner.dim_1920x600.png)\n- Platform logo with modern video play symbol design (logo.dim_256x256.png)\n- Default user avatar placeholder with neutral profile silhouette (default-avatar.dim_200x200.png)\n- Video thumbnail placeholder with play icon overlay (video-placeholder.dim_640x360.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-user-authentication-system-with-internet-identity-integration-for-signup-and-login",
+      "title": "Implement user authentication system with Internet Identity integration for signup and login",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-user-profile-system-with-profile-creation-editing-and-viewing-capabilities",
+      "title": "Create user profile system with profile creation, editing, and viewing capabilities",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-video-upload-functionality-supporting-mp4-and-mov-formats-with-file-validation-and-storage-in-backend",
+      "title": "Implement video upload functionality supporting MP4 and MOV formats with file validation and storage in backend",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-video-streaming-interface-with-playback-controls-and-video-player-component",
+      "title": "Build video streaming interface with playback controls and video player component",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-like-system-allowing-users-to-like-videos-with-like-count-display-and-toggle-functionality",
+      "title": "Implement like system allowing users to like videos with like count display and toggle functionality",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-comment-system-with-comment-creation-display-and-deletion-functionality-for-videos",
+      "title": "Create comment system with comment creation, display, and deletion functionality for videos",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-channel-subscription-system-allowing-users-to-subscribe-to-other-users-and-view-subscriber-counts",
+      "title": "Implement channel subscription system allowing users to subscribe to other users and view subscriber counts",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-video-categorization-system-with-predefined-categories-and-category-based-filtering",
+      "title": "Create video categorization system with predefined categories and category-based filtering",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-search-functionality-with-title-and-description-matching-for-finding-videos",
+      "title": "Implement search functionality with title and description matching for finding videos",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-trending-section-displaying-videos-ranked-by-view-count-and-engagement-metrics",
+      "title": "Build trending section displaying videos ranked by view count and engagement metrics",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-watch-history-system-tracking-videos-viewed-by-each-user-with-timestamp",
+      "title": "Implement watch history system tracking videos viewed by each user with timestamp",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-playlist-creation-and-management-system-allowing-users-to-organize-videos-into-custom-playlists",
+      "title": "Create playlist creation and management system allowing users to organize videos into custom playlists",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-admin-dashboard-with-user-management-video-moderation-and-platform-statistics",
+      "title": "Build admin dashboard with user management, video moderation, and platform statistics",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-content-report-system-allowing-users-to-flag-inappropriate-videos-with-report-reasons",
+      "title": "Implement content report system allowing users to flag inappropriate videos with report reasons",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-content-moderation-system-with-admin-review-interface-for-reported-videos-and-content-removal-capabilities",
+      "title": "Create content moderation system with admin review interface for reported videos and content removal capabilities",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-and-implement-a-cohesive-visual-theme-with-modern-cinematic-styling-featuring-dark-backgrounds-gradient-accents-and-sleek-typography-optimized-for-video-content-presentation",
+      "title": "Design and implement a cohesive visual theme with modern, cinematic styling featuring dark backgrounds, gradient accents, and sleek typography optimized for video content presentation",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User authentication system (signup/login)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "User profile management",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Video upload functionality supporting MP4, MOV formats",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Video streaming with adaptive quality (240p-4K)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Social features: like, comment, share",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Channel subscription system",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Video categories and organization",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Search functionality for videos",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Trending section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Watch history tracking",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Playlist creation and management",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Admin dashboard for platform management",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Content report system",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Content moderation system",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Live streaming capability",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "AI-powered auto captions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "AI video recommendation engine",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Video compression pipeline",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Automatic thumbnail generation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Monetization system (ads + subscriptions)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Creator dashboard with analytics",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "StreamHub",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

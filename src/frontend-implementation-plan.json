@@ -1,0 +1,485 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "StreamHub Video Streaming Platform - Frontend Implementation",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Implement Internet Identity authentication with session persistence",
+      "acceptanceCriteria": [
+        "Users can sign up using Internet Identity",
+        "Users can log in and maintain authenticated sessions",
+        "Authentication state persists across page reloads"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create login/logout button component using the authorization component's Internet Identity integration. Use useInternetIdentity hook for authentication state and actions. Include loading states and error handling. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProtectedRoute.tsx",
+          "operation": "create",
+          "description": "Create route guard component that checks authentication state and redirects unauthenticated users to login. Use the authorization component to verify authentication status."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire LoginButton into the main navigation/header area and wrap authenticated routes with ProtectedRoute component to enforce authentication requirements throughout the app."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Create user profile system with creation, editing, and viewing capabilities",
+      "acceptanceCriteria": [
+        "Users can create and edit their profiles",
+        "Profiles display username, bio, and profile picture",
+        "Users can view other users' public profiles"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useUserProfile.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for getCallerUserProfile, saveCallerUserProfile, and getUserProfile using the authorization component's user profile methods. Include proper loading states and cache invalidation. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create modal component that prompts new users to set up their profile (username, bio, profile picture) on first login. Use the authorization component's profile setup pattern to prevent modal flash. Include form validation and image upload using the blob-storage component's ExternalBlob.fromBytes method. Reference the generated default-avatar.dim_200x200.png from frontend/public/assets/generated/default-avatar.dim_200x200.png as placeholder. Verify both authorization and blob-storage component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Create profile view page displaying username, bio, profile picture, uploaded videos, playlists, and subscriber count. Support viewing both own profile and other users' profiles. Use ExternalBlob.getDirectURL() for profile picture display. Include edit profile button for own profile."
+        },
+        {
+          "path": "frontend/src/components/EditProfileForm.tsx",
+          "operation": "create",
+          "description": "Create profile editing form component with fields for username, bio, and profile picture upload. Use blob-storage component's ExternalBlob for image handling with upload progress tracking. Include form validation and save functionality."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register ProfilePage route at /profile/:userId and wire ProfileSetupModal to show when authenticated user has no profile. Ensure profile setup happens after authentication but before main app access."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement video upload with MP4/MOV validation and progress tracking",
+      "acceptanceCriteria": [
+        "Users can upload MP4 and MOV video files",
+        "File type validation prevents unsupported formats",
+        "Uploaded videos are stored securely in the backend",
+        "Upload progress indicator shows during file transfer"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/VideoUploadForm.tsx",
+          "operation": "create",
+          "description": "Create video upload form with file input (MP4/MOV only), title, description, category dropdown, and thumbnail upload. Validate file types on selection. Use blob-storage component's ExternalBlob.fromBytes with withUploadProgress for video and thumbnail uploads. Display upload progress percentage. Reference the generated video-placeholder.dim_640x360.png from frontend/public/assets/generated/video-placeholder.dim_640x360.png as default thumbnail. Call uploadVideo backend method with ExternalBlob instances. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useVideoUpload.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for uploadVideo backend method. Handle success/error states and invalidate relevant queries (user videos, all videos). Include progress tracking state management."
+        },
+        {
+          "path": "frontend/src/pages/UploadPage.tsx",
+          "operation": "create",
+          "description": "Create upload page containing VideoUploadForm component. Require authentication to access. Show success message and redirect to video page after successful upload."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register UploadPage route at /upload and add navigation link in header/sidebar for authenticated users."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build video streaming interface with playback controls",
+      "acceptanceCriteria": [
+        "Video player displays uploaded videos with standard controls (play, pause, seek, volume)",
+        "Videos stream smoothly from backend storage",
+        "Player is responsive and works on different screen sizes"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/VideoPlayer.tsx",
+          "operation": "create",
+          "description": "Create video player component using HTML5 video element with standard controls. Accept Video object as prop and use ExternalBlob.getDirectURL() for video source to enable streaming and caching. Make player responsive with aspect ratio preservation. Include error handling for playback failures."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "create",
+          "description": "Create video watch page displaying VideoPlayer, video metadata (title, description, uploader, views, category), like button, comment section, and related videos. Fetch video data by ID from URL params. Track view count on page load."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register VideoPage route at /watch/:videoId for individual video viewing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Implement like system with toggle functionality and real-time count updates",
+      "acceptanceCriteria": [
+        "Users can like and unlike videos",
+        "Like count updates in real-time",
+        "Like state persists across sessions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LikeButton.tsx",
+          "operation": "create",
+          "description": "Create like button component showing like count and toggle state. Call likeVideo backend method on click. Use optimistic updates for instant UI feedback. Show authentication prompt for unauthenticated users. Include visual feedback (icon change, animation) on like/unlike."
+        },
+        {
+          "path": "frontend/src/hooks/useVideoLike.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for likeVideo backend method with optimistic updates. Track like state locally and sync with backend. Invalidate video queries on mutation success."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Wire LikeButton component into VideoPage below the video player, passing current video data and like count."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Create comment system with posting, display, and deletion capabilities",
+      "acceptanceCriteria": [
+        "Users can post comments on videos",
+        "Comments display with username and timestamp",
+        "Users can delete their own comments"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CommentSection.tsx",
+          "operation": "create",
+          "description": "Create comment section component displaying comment list with username, timestamp, and comment text. Show delete button only for comment author (compare Principal). Include comment input form for authenticated users. Use addComment and deleteComment backend methods."
+        },
+        {
+          "path": "frontend/src/hooks/useComments.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for fetching video comments and mutations for addComment and deleteComment. Handle optimistic updates for adding comments. Invalidate comment queries on mutations."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Wire CommentSection component into VideoPage below the video metadata section, passing videoId prop."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Implement channel subscription system with subscriber count display",
+      "acceptanceCriteria": [
+        "Users can subscribe and unsubscribe from channels",
+        "Subscriber count displays on user profiles",
+        "Subscription status persists across sessions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SubscribeButton.tsx",
+          "operation": "create",
+          "description": "Create subscribe/unsubscribe button component for user channels. Call subscribeToChannel backend method. Show subscription state and subscriber count. Use optimistic updates for instant UI feedback. Disable for own channel."
+        },
+        {
+          "path": "frontend/src/hooks/useSubscription.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for subscribeToChannel backend method with optimistic updates. Track subscription state and invalidate relevant queries on success."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Wire SubscribeButton into ProfilePage header area when viewing other users' profiles. Display subscriber count prominently on all profiles."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Create video categorization system with category-based filtering",
+      "acceptanceCriteria": [
+        "Videos can be assigned to categories during upload",
+        "Users can browse videos by category",
+        "Categories display with video counts"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/CategoryPage.tsx",
+          "operation": "create",
+          "description": "Create category browse page displaying videos filtered by category using getVideosByCategory backend method. Show category name and video count. Display videos in responsive grid layout with thumbnails using ExternalBlob.getDirectURL()."
+        },
+        {
+          "path": "frontend/src/components/CategoryNav.tsx",
+          "operation": "create",
+          "description": "Create category navigation component listing all available categories as links. Include video count badges. Style active category differently."
+        },
+        {
+          "path": "frontend/src/hooks/useCategories.ts",
+          "operation": "create",
+          "description": "Create React Query hook for getVideosByCategory backend method. Support dynamic category parameter. Include loading and error states."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register CategoryPage route at /category/:categoryName and wire CategoryNav into main navigation/sidebar."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Implement search functionality with keyword matching",
+      "acceptanceCriteria": [
+        "Users can search videos by keywords",
+        "Search returns relevant results based on video titles and descriptions",
+        "Search results display in a grid layout"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SearchBar.tsx",
+          "operation": "create",
+          "description": "Create search input component with submit handler. Navigate to search results page on submit. Include autocomplete or search suggestions if feasible. Style consistently with app theme."
+        },
+        {
+          "path": "frontend/src/pages/SearchResultsPage.tsx",
+          "operation": "create",
+          "description": "Create search results page displaying videos matching search term using searchVideos backend method. Get search term from URL query params. Display results in responsive grid with thumbnails. Show message when no results found."
+        },
+        {
+          "path": "frontend/src/hooks/useSearch.ts",
+          "operation": "create",
+          "description": "Create React Query hook for searchVideos backend method. Accept search term parameter. Include debouncing if used for live search. Handle empty results gracefully."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire SearchBar into header/navigation area and register SearchResultsPage route at /search with query param support."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Build trending section displaying popular videos ranked by engagement",
+      "acceptanceCriteria": [
+        "Trending page displays most viewed videos",
+        "Trending algorithm considers recent views and likes",
+        "Trending list updates periodically"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TrendingPage.tsx",
+          "operation": "create",
+          "description": "Create trending videos page displaying videos from getTrendingVideos backend method. Show videos in ranked list or grid with view counts, like counts, and trending indicators. Include automatic refresh interval for periodic updates."
+        },
+        {
+          "path": "frontend/src/hooks/useTrending.ts",
+          "operation": "create",
+          "description": "Create React Query hook for getTrendingVideos backend method. Configure refetch interval for periodic updates. Include loading and error states."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register TrendingPage route at /trending and add navigation link in main menu/sidebar."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Implement watch history system tracking viewed videos with timestamps",
+      "acceptanceCriteria": [
+        "System records videos watched by logged-in users",
+        "Users can view their watch history",
+        "Watch history displays with view timestamps"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HistoryPage.tsx",
+          "operation": "create",
+          "description": "Create watch history page displaying user's viewed videos with timestamps. Fetch history data from backend. Display videos in chronological order with view dates. Require authentication to access. Include clear history option if supported."
+        },
+        {
+          "path": "frontend/src/hooks/useWatchHistory.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for fetching watch history and recording video views. Call backend method when video playback starts on VideoPage."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Wire watch history tracking by calling useWatchHistory hook to record video view when VideoPage loads or playback starts."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register HistoryPage route at /history and add navigation link in user menu/sidebar for authenticated users."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Create playlist management system for organizing videos",
+      "acceptanceCriteria": [
+        "Users can create named playlists",
+        "Users can add and remove videos from playlists",
+        "Playlists display on user profiles"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PlaylistManager.tsx",
+          "operation": "create",
+          "description": "Create playlist management component with create playlist form, add/remove video functionality, and playlist list display. Use createPlaylist and addVideoToPlaylist backend methods. Show playlists with video counts."
+        },
+        {
+          "path": "frontend/src/pages/PlaylistPage.tsx",
+          "operation": "create",
+          "description": "Create individual playlist view page displaying playlist videos. Support playback of playlist videos in sequence. Show playlist metadata (name, video count, creator)."
+        },
+        {
+          "path": "frontend/src/hooks/usePlaylists.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for createPlaylist, addVideoToPlaylist, and fetching user playlists. Handle mutations with cache invalidation and optimistic updates."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Wire PlaylistManager into ProfilePage to display user's playlists. Show playlist list with video counts and links to individual playlist pages."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register PlaylistPage route at /playlist/:playlistId for individual playlist viewing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Build admin dashboard with user management and platform statistics",
+      "acceptanceCriteria": [
+        "Admins can view all users and videos",
+        "Dashboard displays key metrics (total users, videos, views)",
+        "Admins have elevated permissions for content management"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create admin dashboard page displaying platform statistics from getPlatformStats backend method, user list from getAllUsers, and reported content from getAllReports. Include charts/cards for key metrics. Require admin role using authorization component's isCallerAdmin check. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAdminData.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for getPlatformStats, getAllUsers, and getAllReports backend methods. Include admin permission checks. Handle unauthorized access errors gracefully."
+        },
+        {
+          "path": "frontend/src/components/AdminGuard.tsx",
+          "operation": "create",
+          "description": "Create admin route guard component that checks isCallerAdmin and shows access denied screen for non-admin users. Use the authorization component's access control pattern."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register AdminDashboard route at /admin wrapped with AdminGuard component. Add admin navigation link in header/sidebar visible only to admin users."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Implement content report system for flagging inappropriate videos",
+      "acceptanceCriteria": [
+        "Users can report videos with specific reasons",
+        "Reports are submitted to admin review queue",
+        "Users cannot report the same video multiple times"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ReportVideoButton.tsx",
+          "operation": "create",
+          "description": "Create report button component that opens report modal with reason selection. Call reportVideo backend method on submit. Show success message after submission. Disable if user already reported the video (track client-side)."
+        },
+        {
+          "path": "frontend/src/components/ReportModal.tsx",
+          "operation": "create",
+          "description": "Create modal component for reporting videos with predefined reason options (spam, inappropriate content, copyright violation, etc.) and optional text description. Include cancel and submit actions."
+        },
+        {
+          "path": "frontend/src/hooks/useReport.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for reportVideo backend method. Handle success/error states and show appropriate user feedback. Track reported videos locally to prevent duplicate reports."
+        },
+        {
+          "path": "frontend/src/pages/VideoPage.tsx",
+          "operation": "modify",
+          "description": "Wire ReportVideoButton into VideoPage video actions menu (near like/share buttons). Show for authenticated users who are not the video uploader."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Create content moderation system with admin review interface",
+      "acceptanceCriteria": [
+        "Admins can review reported content",
+        "Admins can remove or approve flagged videos",
+        "Moderation actions are logged"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ModerationQueue.tsx",
+          "operation": "create",
+          "description": "Create moderation queue component displaying reported videos with report details (reporter, reason, timestamp). Include approve/remove action buttons. Use getVideoReports and removeReportedVideo backend methods. Show video preview and metadata for context."
+        },
+        {
+          "path": "frontend/src/hooks/useModeration.ts",
+          "operation": "create",
+          "description": "Create React Query hooks for getVideoReports and removeReportedVideo backend methods. Include admin permission checks. Invalidate report queries after moderation actions."
+        },
+        {
+          "path": "frontend/src/pages/AdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Wire ModerationQueue component into AdminDashboard as a dedicated section or tab. Display pending reports count as notification badge."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Design cohesive visual theme with cinematic dark styling optimized for video content",
+      "acceptanceCriteria": [
+        "Color scheme uses dark backgrounds with contrasting accent colors",
+        "Typography is clean and readable for video metadata",
+        "Layout emphasizes video thumbnails and content discovery",
+        "Design is consistent across all pages"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define global CSS custom properties for dark theme colors (dark backgrounds, gradient accents like purple/blue), typography styles (clean sans-serif fonts), and spacing scales. Set body background to dark color. Apply consistent styling for video content presentation."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Configure Tailwind theme with dark color palette (slate/gray backgrounds, purple/blue accents), custom typography settings for video metadata readability, and extended spacing for video grid layouts. Enable dark mode configuration."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create main layout component with dark themed header/navigation, sidebar with category links, and main content area. Include generated hero-banner.dim_1920x600.png from frontend/public/assets/generated/hero-banner.dim_1920x600.png and logo.dim_256x256.png from frontend/public/assets/generated/logo.dim_256x256.png. Apply consistent dark theme styling across layout sections with gradient accents."
+        },
+        {
+          "path": "frontend/src/components/VideoCard.tsx",
+          "operation": "create",
+          "description": "Create video card component for grid displays with thumbnail (using ExternalBlob.getDirectURL()), title, uploader name, view count, and category badge. Style with dark theme, hover effects, and clean typography. Use generated video-placeholder.dim_640x360.png from frontend/public/assets/generated/video-placeholder.dim_640x360.png as fallback thumbnail."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routes with Layout component to apply consistent dark cinematic theme across all pages. Ensure header and navigation maintain theme throughout app."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-20T15:27:24.807Z",
+  "summary": "The implementation covers most core requirements including authentication, user profiles, video upload/streaming, likes, comments, subscriptions, categories, search, trending, watch history, playlists, and admin moderation. However, several acceptance criteria are not fully addressed in the visible diff, and some requested images are missing.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Authentication state persists across page reloads",
+      "reason": "The InternetIdentityProvider implementation shows state management but the diff is truncated. The visible code does not show explicit persistence handling or session restoration logic beyond the AuthClient creation options.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Upload progress indicator shows during file transfer",
+      "reason": "ProfileSetupModal shows upload progress tracking for profile pictures, but the UploadPage implementation (not in visible diff) does not show a progress indicator for video uploads despite ExternalBlob supporting progress callbacks.",
+      "evidence": [
+        "frontend/src/components/ProfileSetupModal.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Trending algorithm considers recent views and likes",
+      "reason": "Backend getTrendingVideos implementation is truncated. The visible Video type shows views field but no like count or timestamp weighting in the trending calculation logic.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Watch history displays with view timestamps",
+      "reason": "HistoryPage route is registered but the page implementation is not in the visible diff. No backend methods for watch history retrieval or timestamp tracking are shown.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "requirement": "Playlists display on user profiles",
+      "reason": "PlaylistPage route exists and backend has userPlaylists Map, but ProfilePage implementation is not in visible diff. No evidence of playlist display integration on profile pages.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Moderation actions are logged",
+      "reason": "ModerationQueue component shows video removal capability but no logging mechanism is visible in the diff. The removeReportedVideo backend function is not shown in the truncated main.mo.",
+      "evidence": [
+        "frontend/src/components/ModerationQueue.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.75,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/CategoryNav.tsx",
+    "frontend/src/components/CommentSection.tsx",
+    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/LikeButton.tsx",
+    "frontend/src/components/LoginButton.tsx",
+    "frontend/src/components/ModerationQueue.tsx",
+    "frontend/src/components/ProfileSetupModal.tsx",
+    "frontend/src/components/ReportModal.tsx",
+    "frontend/src/components/ReportVideoButton.tsx",
+    "frontend/src/components/SubscribeButton.tsx",
+    "frontend/src/components/VideoCard.tsx",
+    "frontend/src/components/VideoPlayer.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AdminDashboard.tsx",
+    "frontend/src/pages/CategoryPage.tsx",
+    "frontend/src/pages/HistoryPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/PlaylistPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/pages/SearchResultsPage.tsx",
+    "frontend/src/pages/TrendingPage.tsx",
+    "frontend/src/pages/UploadPage.tsx",
+    "frontend/src/pages/VideoPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
