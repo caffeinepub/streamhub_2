@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 13,
   "summary": "Modern video streaming and uploading website with comprehensive features including user management, video upload/streaming with adaptive quality, social features (like/comment/share/subscribe), search, trending, playlists, admin dashboard, content moderation, live streaming, AI features (captions, recommendations), compression, monetization, and creator analytics",
   "architectural_notes": [
     "Scalable architecture designed for millions of concurrent users",
@@ -16,7 +16,6 @@
   ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Hero banner image with cinematic video streaming theme featuring film reels and play button iconography (hero-banner.dim_1920x600.png)\n- Platform logo with modern video play symbol design (logo.dim_256x256.png)\n- Default user avatar placeholder with neutral profile silhouette (default-avatar.dim_200x200.png)\n- Video thumbnail placeholder with play icon overlay (video-placeholder.dim_640x360.png)",
   "existing_features": [
     {
       "id": "feature-implement-user-authentication-system-with-internet-identity-integration-for-signup-and-login",
@@ -145,6 +144,110 @@
         "REQ-16"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-user-management-section-to-admin-dashboard-with-ability-to-view-all-users-search-by-username-or-email-and-see-user-statistics-including-total-videos-uploaded-subscriber-count-and-account-creation-date",
+      "title": "Add user management section to admin dashboard with ability to view all users, search by username or email, and see user statistics including total videos uploaded, subscriber count, and account creation date",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-user-action-controls-in-admin-dashboard-allowing-admins-to-suspend-or-ban-user-accounts-with-reason-tracking-and-restore-capability",
+      "title": "Implement user action controls in admin dashboard allowing admins to suspend or ban user accounts with reason tracking and restore capability",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-video-management-section-to-admin-dashboard-with-bulk-actions-for-removing-hiding-or-featuring-videos-across-the-platform",
+      "title": "Add video management section to admin dashboard with bulk actions for removing, hiding, or featuring videos across the platform",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-admin-dashboard-statistics-with-detailed-analytics-including-daily-active-users-new-signups-video-uploads-per-day-and-storage-usage-metrics-with-chart-visualizations",
+      "title": "Enhance admin dashboard statistics with detailed analytics including daily active users, new signups, video uploads per day, and storage usage metrics with chart visualizations",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-content-moderation-queue-filters-and-sorting-options-in-admin-dashboard-allowing-admins-to-prioritize-reports-by-severity-type-and-age",
+      "title": "Add content moderation queue filters and sorting options in admin dashboard allowing admins to prioritize reports by severity, type, and age",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-admin-activity-log-in-admin-dashboard-showing-all-administrative-actions-with-timestamp-admin-identity-action-type-and-affected-resources-for-audit-trail",
+      "title": "Implement admin activity log in admin dashboard showing all administrative actions with timestamp, admin identity, action type, and affected resources for audit trail",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-platform-settings-section-to-admin-dashboard-for-configuring-global-platform-parameters-including-max-video-size-allowed-categories-and-moderation-policies",
+      "title": "Add platform settings section to admin dashboard for configuring global platform parameters including max video size, allowed categories, and moderation policies",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-prominent-video-upload-button-to-the-homepage-homepage-tsx-that-navigates-authenticated-users-to-the-upload-page-upload-and-prompts-unauthenticated-users-to-log-in",
+      "title": "Add a prominent video upload button to the homepage (HomePage.tsx) that navigates authenticated users to the upload page (/upload) and prompts unauthenticated users to log in",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-video-upload-button-to-the-main-layout-header-layout-tsx-next-to-the-search-bar-for-easy-access-from-any-page",
+      "title": "Add a video upload button to the main layout header (Layout.tsx) next to the search bar for easy access from any page",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-application-name-in-frontend-index-html-from-streamhub-to-a-new-name-chosen-by-the-user-or-derived-from-context",
+      "title": "Update the application name in frontend/index.html from 'StreamHub' to a new name chosen by the user or derived from context",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-logo-text-in-the-layout-tsx-header-component-to-reflect-the-new-application-name",
+      "title": "Update the logo text in the Layout.tsx header component to reflect the new application name",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-dedicated-admin-login-link-to-the-layout-tsx-header-component-that-navigates-to-admin-when-clicked-positioned-near-the-user-profile-or-settings-area",
+      "title": "Add a dedicated admin login link to the Layout.tsx header component that navigates to /admin when clicked, positioned near the user profile or settings area",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-login-shortcut-link-to-the-homepage-tsx-hero-section-or-below-it-prominently-displayed-for-easy-admin-access",
+      "title": "Add an admin login shortcut link to the HomePage.tsx hero section or below it, prominently displayed for easy admin access",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -271,6 +374,20 @@
     {
       "id": "AR-21",
       "summary": "Creator dashboard with analytics",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Ensure the application is ready for deployment with all recent changes included",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Create admin login link for admin dashboard access",
       "reqIds": [],
       "status": "pending"
     }

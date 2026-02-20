@@ -1,333 +1,61 @@
 {
   "kind": "build_request",
-  "title": "Build video streaming platform with user authentication, video upload, and social features",
-  "projectName": "StreamHub",
+  "title": "Add admin login link",
+  "projectName": "VidStream",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Implement user authentication system with Internet Identity integration for signup and login",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "User signup/login"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can sign up using Internet Identity",
-        "Users can log in and maintain authenticated sessions",
-        "Authentication state persists across page reloads"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Create user profile system with profile creation, editing, and viewing capabilities",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "User profiles"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can create and edit their profiles",
-        "Profiles display username, bio, and profile picture",
-        "Users can view other users' public profiles"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Implement video upload functionality supporting MP4 and MOV formats with file validation and storage in backend",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Video upload (MP4, MOV, etc.)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can upload MP4 and MOV video files",
-        "File type validation prevents unsupported formats",
-        "Uploaded videos are stored securely in the backend",
-        "Upload progress indicator shows during file transfer"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Build video streaming interface with playback controls and video player component",
+      "id": "REQ-29",
+      "text": "Add a dedicated admin login link to the Layout.tsx header component that navigates to /admin when clicked, positioned near the user profile or settings area",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-user-latest"
         ],
         "quotes": [
-          "Video streaming with adaptive quality (240p–4K)"
+          "Creat a admin login link"
         ]
       },
       "acceptanceCriteria": [
-        "Video player displays uploaded videos with standard controls (play, pause, seek, volume)",
-        "Videos stream smoothly from backend storage",
-        "Player is responsive and works on different screen sizes"
+        "An admin login link is visible in the header for all users",
+        "Clicking the link navigates to the /admin route (AdminDashboard page)",
+        "The link is styled consistently with other header navigation elements",
+        "The link is accessible from all pages in the application"
       ]
     },
     {
-      "id": "REQ-5",
-      "text": "Implement like system allowing users to like videos with like count display and toggle functionality",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Like, comment, share"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can like and unlike videos",
-        "Like count updates in real-time",
-        "Like state persists across sessions"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Create comment system with comment creation, display, and deletion functionality for videos",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Like, comment, share"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can post comments on videos",
-        "Comments display with username and timestamp",
-        "Users can delete their own comments"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Implement channel subscription system allowing users to subscribe to other users and view subscriber counts",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Subscribe system"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can subscribe and unsubscribe from channels",
-        "Subscriber count displays on user profiles",
-        "Subscription status persists across sessions"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Create video categorization system with predefined categories and category-based filtering",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Video categories"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Videos can be assigned to categories during upload",
-        "Users can browse videos by category",
-        "Categories display with video counts"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Implement search functionality with title and description matching for finding videos",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Search functionality"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can search videos by keywords",
-        "Search returns relevant results based on video titles and descriptions",
-        "Search results display in a grid layout"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Build trending section displaying videos ranked by view count and engagement metrics",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Trending section"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Trending page displays most viewed videos",
-        "Trending algorithm considers recent views and likes",
-        "Trending list updates periodically"
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "text": "Implement watch history system tracking videos viewed by each user with timestamp",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Watch history"
-        ]
-      },
-      "acceptanceCriteria": [
-        "System records videos watched by logged-in users",
-        "Users can view their watch history",
-        "Watch history displays with view timestamps"
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "text": "Create playlist creation and management system allowing users to organize videos into custom playlists",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Playlist creation"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can create named playlists",
-        "Users can add and remove videos from playlists",
-        "Playlists display on user profiles"
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "text": "Build admin dashboard with user management, video moderation, and platform statistics",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Admin dashboard"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admins can view all users and videos",
-        "Dashboard displays key metrics (total users, videos, views)",
-        "Admins have elevated permissions for content management"
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "text": "Implement content report system allowing users to flag inappropriate videos with report reasons",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Report system"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can report videos with specific reasons",
-        "Reports are submitted to admin review queue",
-        "Users cannot report the same video multiple times"
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "text": "Create content moderation system with admin review interface for reported videos and content removal capabilities",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "Content moderation system"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admins can review reported content",
-        "Admins can remove or approve flagged videos",
-        "Moderation actions are logged"
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "text": "Design and implement a cohesive visual theme with modern, cinematic styling featuring dark backgrounds, gradient accents, and sleek typography optimized for video content presentation",
+      "id": "REQ-30",
+      "text": "Add an admin login shortcut link to the HomePage.tsx hero section or below it, prominently displayed for easy admin access",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-user-latest"
+        ],
+        "quotes": [
+          "Creat a admin login link"
         ]
       },
       "acceptanceCriteria": [
-        "Color scheme uses dark backgrounds with contrasting accent colors",
-        "Typography is clean and readable for video metadata",
-        "Layout emphasizes video thumbnails and content discovery",
-        "Design is consistent across all pages"
+        "A clearly labeled admin login link appears on the homepage",
+        "The link navigates to /admin when clicked",
+        "The link is visually distinct but does not dominate the hero section",
+        "The link is accessible to both authenticated and unauthenticated users"
       ]
     }
   ],
   "constraints": [
-    "Backend must use single-actor Motoko architecture",
-    "Frontend must use React with TypeScript, Tailwind CSS, and React Query",
-    "Authentication must use Internet Identity only",
-    "All video storage must be handled through the Internet Computer backend",
-    "Do not implement external CDN integration, cloud hosting providers, or third-party video processing services",
-    "Do not implement AI features (auto captions, recommendations) that require external LLM or ML service integrations",
-    "Do not implement real-time live streaming features",
-    "Do not implement adaptive quality streaming (240p-4K) as it requires external video transcoding services",
-    "Do not implement video compression or thumbnail auto-generation that requires external processing services",
-    "Do not implement monetization systems involving external ad networks or payment processors beyond what is natively supported",
-    "Do not implement creator analytics that require external analytics services"
+    "Do not modify the useInternetIdentity.ts or useActor.ts hooks",
+    "Do not change the existing admin authorization logic in the backend",
+    "The admin dashboard route (/admin) already exists and should remain unchanged"
   ],
   "nonGoals": [
-    "Integration with external CDN services",
-    "Cloud hosting on AWS, Google Cloud, or Azure",
-    "Third-party AI service integrations for captions or recommendations",
-    "Real-time live streaming with WebSocket or Socket.io",
-    "Adaptive bitrate streaming with multiple quality levels",
-    "External video transcoding or compression services",
-    "Third-party ad network integration",
-    "External payment processor integration beyond native support",
-    "Social media API integrations for sharing",
-    "Email notification systems",
-    "SMS or push notification services",
-    "Mobile app development",
-    "Multi-language support in initial version",
-    "Advanced analytics dashboards with third-party services"
+    "Creating a separate admin authentication system beyond Internet Identity",
+    "Modifying the existing admin token initialization mechanism",
+    "Adding role-based UI rendering that hides the link from non-admin users",
+    "Creating a dedicated admin login page separate from the admin dashboard"
   ],
   "imageRequirements": {
-    "required": [
-      "Hero banner image with cinematic video streaming theme featuring film reels and play button iconography (hero-banner.dim_1920x600.png)",
-      "Platform logo with modern video play symbol design (logo.dim_256x256.png)",
-      "Default user avatar placeholder with neutral profile silhouette (default-avatar.dim_200x200.png)",
-      "Video thumbnail placeholder with play icon overlay (video-placeholder.dim_640x360.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

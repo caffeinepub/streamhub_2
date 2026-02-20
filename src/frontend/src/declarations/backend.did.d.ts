@@ -10,6 +10,14 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AdminAction {
+  'id' : bigint,
+  'admin' : Principal,
+  'actionType' : string,
+  'timestamp' : Time,
+  'details' : string,
+  'affectedResource' : string,
+}
 export interface Comment {
   'id' : string,
   'text' : string,
@@ -17,11 +25,25 @@ export interface Comment {
   'timestamp' : Time,
 }
 export type ExternalBlob = Uint8Array;
+export interface PlatformSettings {
+  'maxVideoSizeMB' : bigint,
+  'allowedCategories' : Array<string>,
+  'moderationPolicies' : string,
+}
+export interface PlaylistView { 'name' : string, 'videos' : Array<string> }
 export interface Report {
   'timestamp' : Time,
   'reporter' : Principal,
   'reason' : string,
   'videoId' : string,
+}
+export interface SuspensionStatus {
+  'status' : { 'active' : null } |
+    { 'banned' : null } |
+    { 'suspended' : null },
+  'admin' : Principal,
+  'timestamp' : Time,
+  'reason' : string,
 }
 export type Time = bigint;
 export interface UserProfile {
@@ -36,8 +58,10 @@ export type UserRole = { 'admin' : null } |
 export interface Video {
   'id' : string,
   'title' : string,
+  'featured' : boolean,
   'thumbnail' : [] | [ExternalBlob],
   'views' : bigint,
+  'hidden' : boolean,
   'description' : string,
   'videoFile' : ExternalBlob,
   'category' : string,
@@ -75,28 +99,58 @@ export interface _SERVICE {
   'addComment' : ActorMethod<[string, string], Comment>,
   'addVideoToPlaylist' : ActorMethod<[string, string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'banUser' : ActorMethod<[Principal, string], undefined>,
+  'bulkFeatureVideos' : ActorMethod<[Array<string>], undefined>,
+  'bulkHideVideos' : ActorMethod<[Array<string>], undefined>,
+  'bulkRemoveVideos' : ActorMethod<[Array<string>], undefined>,
   'createPlaylist' : ActorMethod<[string], undefined>,
   'deleteComment' : ActorMethod<[string, string], undefined>,
   'deleteVideo' : ActorMethod<[string], undefined>,
+  'getAdminActivityLog' : ActorMethod<[bigint], Array<AdminAction>>,
   'getAllReports' : ActorMethod<[], Array<[string, Array<Report>]>>,
   'getAllUsers' : ActorMethod<[], Array<[Principal, UserProfile]>>,
+  'getCallerSubscriptions' : ActorMethod<[], Array<Principal>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getFeaturedVideos' : ActorMethod<[], Array<Video>>,
+  'getPlatformSettings' : ActorMethod<[], PlatformSettings>,
   'getPlatformStats' : ActorMethod<
     [],
-    { 'totalReports' : bigint, 'totalVideos' : bigint, 'totalUsers' : bigint }
+    {
+      'bannedUsers' : bigint,
+      'totalReports' : bigint,
+      'totalVideos' : bigint,
+      'totalUsers' : bigint,
+      'suspendedUsers' : bigint,
+    }
   >,
   'getTrendingVideos' : ActorMethod<[], Array<Video>>,
+  'getUserPlaylists' : ActorMethod<[Principal], Array<PlaylistView>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getUserStatistics' : ActorMethod<
+    [Principal],
+    {
+      'accountCreationDate' : [] | [Time],
+      'totalVideos' : bigint,
+      'subscriberCount' : bigint,
+    }
+  >,
+  'getUserStatus' : ActorMethod<[Principal], SuspensionStatus>,
+  'getVideo' : ActorMethod<[string], [] | [Video]>,
+  'getVideoComments' : ActorMethod<[string], Array<Comment>>,
   'getVideoReports' : ActorMethod<[string], Array<Report>>,
   'getVideosByCategory' : ActorMethod<[string], Array<Video>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'likeVideo' : ActorMethod<[string], bigint>,
   'removeReportedVideo' : ActorMethod<[string], undefined>,
   'reportVideo' : ActorMethod<[string, string], undefined>,
+  'restoreUser' : ActorMethod<[Principal], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'searchUsers' : ActorMethod<[string], Array<[Principal, UserProfile]>>,
   'searchVideos' : ActorMethod<[string], Array<Video>>,
   'subscribeToChannel' : ActorMethod<[Principal], undefined>,
+  'suspendUser' : ActorMethod<[Principal, string], undefined>,
+  'updatePlatformSettings' : ActorMethod<[PlatformSettings], undefined>,
   'uploadVideo' : ActorMethod<
     [string, string, string, ExternalBlob, [] | [ExternalBlob], string],
     Video

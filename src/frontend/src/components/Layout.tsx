@@ -1,13 +1,14 @@
 import { Link, useNavigate } from '@tanstack/react-router';
-import { Search, Upload, TrendingUp, History, User, Menu, Home } from 'lucide-react';
+import { Search, Upload, TrendingUp, History, User, Menu, Home, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
 import LoginButton from './LoginButton';
 import CategoryNav from './CategoryNav';
 import { useState } from 'react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useIsCallerAdmin } from '../hooks/useQueries';
+import { useIsCallerAdmin, useGetAllReports } from '../hooks/useQueries';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,6 +16,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { identity } = useInternetIdentity();
   const isAuthenticated = !!identity;
   const { data: isAdmin } = useIsCallerAdmin();
+  const { data: reports = [] } = useGetAllReports();
+
+  const unresolvedReportCount = reports.reduce((sum, [_, videoReports]) => sum + videoReports.length, 0);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +41,45 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0">
               <div className="flex flex-col gap-4 p-6">
+                <nav className="space-y-1">
+                  <Button variant="ghost" className="w-full justify-start" asChild>
+                    <Link to="/">
+                      <Home className="mr-2 h-4 w-4" />
+                      Home
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start" asChild>
+                    <Link to="/trending">
+                      <TrendingUp className="mr-2 h-4 w-4" />
+                      Trending
+                    </Link>
+                  </Button>
+                  {isAuthenticated && (
+                    <>
+                      <Button variant="ghost" className="w-full justify-start" asChild>
+                        <Link to="/history">
+                          <History className="mr-2 h-4 w-4" />
+                          History
+                        </Link>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start" asChild>
+                        <Link 
+                          to="/profile/$userId" 
+                          params={{ userId: identity?.getPrincipal().toString() || '' }}
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          My Profile
+                        </Link>
+                      </Button>
+                    </>
+                  )}
+                  <Button variant="ghost" className="w-full justify-start" asChild>
+                    <Link to="/admin">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Admin Dashboard
+                    </Link>
+                  </Button>
+                </nav>
                 <CategoryNav />
               </div>
             </SheetContent>
@@ -44,9 +87,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/assets/generated/logo.dim_256x256.png" alt="StreamHub" className="h-8 w-8" />
+            <img src="/assets/generated/logo.dim_256x256.png" alt="VidStream" className="h-8 w-8" />
             <span className="hidden font-bold text-xl bg-gradient-to-r from-primary to-chart-1 bg-clip-text text-transparent sm:inline-block">
-              StreamHub
+              VidStream
             </span>
           </Link>
 
@@ -73,6 +116,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               </Button>
             )}
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/admin">
+                <Shield className="h-5 w-5" />
+              </Link>
+            </Button>
             <LoginButton />
           </nav>
         </div>
@@ -116,10 +164,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </>
               )}
               {isAdmin && (
-                <Button variant="ghost" className="w-full justify-start" asChild>
+                <Button variant="ghost" className="w-full justify-start relative" asChild>
                   <Link to="/admin">
-                    <User className="mr-2 h-4 w-4" />
-                    Admin Dashboard
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin
+                    {unresolvedReportCount > 0 && (
+                      <Badge variant="destructive" className="ml-auto h-5 px-1.5 text-xs">
+                        {unresolvedReportCount}
+                      </Badge>
+                    )}
                   </Link>
                 </Button>
               )}
@@ -138,21 +191,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 bg-muted/30 mt-12">
+      <footer className="border-t border-border/40 mt-12">
         <div className="container px-4 py-6">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} StreamHub. All rights reserved.
+              © {new Date().getFullYear()} VidStream. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
               Built with ❤️ using{' '}
               <a
                 href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
-                  window.location.hostname
+                  typeof window !== 'undefined' ? window.location.hostname : 'vidstream'
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium hover:text-foreground transition-colors"
+                className="underline hover:text-foreground transition-colors"
               >
                 caffeine.ai
               </a>

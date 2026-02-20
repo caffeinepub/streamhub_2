@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { Video, Comment, UserProfile, Report } from '../backend';
+import type { Video, Comment, UserProfile, Report, AdminAction, PlatformSettings } from '../backend';
 import { Principal } from '@dfinity/principal';
 import { ExternalBlob } from '../backend';
+import { toast } from 'sonner';
 
 // User Profile Queries
 export function useGetCallerUserProfile() {
@@ -64,7 +65,7 @@ export function useGetTrendingVideos() {
       return actor.getTrendingVideos();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 60000, // Refresh every minute
+    refetchInterval: 60000,
   });
 }
 
@@ -246,6 +247,7 @@ export function useReportVideo() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reports'] });
+      queryClient.invalidateQueries({ queryKey: ['allReports'] });
     },
   });
 }
@@ -277,6 +279,32 @@ export function useGetAllUsers() {
   });
 }
 
+export function useSearchUsers(searchTerm: string) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Array<[Principal, UserProfile]>>({
+    queryKey: ['searchUsers', searchTerm],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.searchUsers(searchTerm);
+    },
+    enabled: !!actor && !isFetching && !!searchTerm && searchTerm.length > 0,
+  });
+}
+
+export function useGetUserStatistics(userId: string) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery({
+    queryKey: ['userStatistics', userId],
+    queryFn: async () => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.getUserStatistics(Principal.fromText(userId));
+    },
+    enabled: !!actor && !isFetching && !!userId,
+  });
+}
+
 export function useGetPlatformStats() {
   const { actor, isFetching } = useActor();
 
@@ -300,6 +328,7 @@ export function useGetAllReports() {
       return actor.getAllReports();
     },
     enabled: !!actor && !isFetching,
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -328,6 +357,157 @@ export function useRemoveReportedVideo() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allReports'] });
       queryClient.invalidateQueries({ queryKey: ['trendingVideos'] });
+      queryClient.invalidateQueries({ queryKey: ['videosByCategory'] });
+    },
+  });
+}
+
+// User Management
+export function useSuspendUser() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ user, reason }: { user: Principal; reason: string }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.suspendUser(user, reason);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+      queryClient.invalidateQueries({ queryKey: ['platformStats'] });
+    },
+  });
+}
+
+export function useBanUser() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ user, reason }: { user: Principal; reason: string }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.banUser(user, reason);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+      queryClient.invalidateQueries({ queryKey: ['platformStats'] });
+    },
+  });
+}
+
+export function useRestoreUser() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (user: Principal) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.restoreUser(user);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+      queryClient.invalidateQueries({ queryKey: ['platformStats'] });
+    },
+  });
+}
+
+// Video Management
+export function useBulkRemoveVideos() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (videoIds: string[]) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.bulkRemoveVideos(videoIds);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trendingVideos'] });
+      queryClient.invalidateQueries({ queryKey: ['videosByCategory'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+      queryClient.invalidateQueries({ queryKey: ['platformStats'] });
+    },
+  });
+}
+
+export function useBulkHideVideos() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (videoIds: string[]) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.bulkHideVideos(videoIds);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trendingVideos'] });
+      queryClient.invalidateQueries({ queryKey: ['videosByCategory'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+    },
+  });
+}
+
+export function useBulkFeatureVideos() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (videoIds: string[]) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.bulkFeatureVideos(videoIds);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['trendingVideos'] });
+      queryClient.invalidateQueries({ queryKey: ['videosByCategory'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
+    },
+  });
+}
+
+// Admin Activity Log
+export function useGetAdminActivityLog(limit: number) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<AdminAction[]>({
+    queryKey: ['adminActivityLog', limit],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAdminActivityLog(BigInt(limit));
+    },
+    enabled: !!actor && !isFetching,
+    refetchOnWindowFocus: true,
+  });
+}
+
+// Platform Settings
+export function useGetPlatformSettings() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<PlatformSettings>({
+    queryKey: ['platformSettings'],
+    queryFn: async () => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.getPlatformSettings();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdatePlatformSettings() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (settings: PlatformSettings) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.updatePlatformSettings(settings);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['platformSettings'] });
+      queryClient.invalidateQueries({ queryKey: ['adminActivityLog'] });
     },
   });
 }

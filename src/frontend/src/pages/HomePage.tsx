@@ -1,6 +1,9 @@
+import { Link } from '@tanstack/react-router';
 import { useGetTrendingVideos } from '../hooks/useQueries';
 import VideoCard from '../components/VideoCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Shield } from 'lucide-react';
 
 export default function HomePage() {
   const { data: videos = [], isLoading } = useGetTrendingVideos();
@@ -24,6 +27,16 @@ export default function HomePage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Admin Login Link */}
+      <div className="flex justify-center">
+        <Button variant="outline" asChild className="gap-2">
+          <Link to="/admin">
+            <Shield className="h-4 w-4" />
+            Admin Dashboard
+          </Link>
+        </Button>
       </div>
 
       {/* Video Grid */}

@@ -31,6 +31,14 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const AdminAction = IDL.Record({
+  'id' : IDL.Nat,
+  'admin' : IDL.Principal,
+  'actionType' : IDL.Text,
+  'timestamp' : Time,
+  'details' : IDL.Text,
+  'affectedResource' : IDL.Text,
+});
 export const Report = IDL.Record({
   'timestamp' : Time,
   'reporter' : IDL.Principal,
@@ -47,13 +55,34 @@ export const UserProfile = IDL.Record({
 export const Video = IDL.Record({
   'id' : IDL.Text,
   'title' : IDL.Text,
+  'featured' : IDL.Bool,
   'thumbnail' : IDL.Opt(ExternalBlob),
   'views' : IDL.Nat,
+  'hidden' : IDL.Bool,
   'description' : IDL.Text,
   'videoFile' : ExternalBlob,
   'category' : IDL.Text,
   'uploader' : IDL.Principal,
   'uploadTime' : Time,
+});
+export const PlatformSettings = IDL.Record({
+  'maxVideoSizeMB' : IDL.Nat,
+  'allowedCategories' : IDL.Vec(IDL.Text),
+  'moderationPolicies' : IDL.Text,
+});
+export const PlaylistView = IDL.Record({
+  'name' : IDL.Text,
+  'videos' : IDL.Vec(IDL.Text),
+});
+export const SuspensionStatus = IDL.Record({
+  'status' : IDL.Variant({
+    'active' : IDL.Null,
+    'banned' : IDL.Null,
+    'suspended' : IDL.Null,
+  }),
+  'admin' : IDL.Principal,
+  'timestamp' : Time,
+  'reason' : IDL.Text,
 });
 
 export const idlService = IDL.Service({
@@ -87,9 +116,18 @@ export const idlService = IDL.Service({
   'addComment' : IDL.Func([IDL.Text, IDL.Text], [Comment], []),
   'addVideoToPlaylist' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'banUser' : IDL.Func([IDL.Principal, IDL.Text], [], []),
+  'bulkFeatureVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+  'bulkHideVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+  'bulkRemoveVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
   'createPlaylist' : IDL.Func([IDL.Text], [], []),
   'deleteComment' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'deleteVideo' : IDL.Func([IDL.Text], [], []),
+  'getAdminActivityLog' : IDL.Func(
+      [IDL.Nat],
+      [IDL.Vec(AdminAction)],
+      ['query'],
+    ),
   'getAllReports' : IDL.Func(
       [],
       [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(Report)))],
@@ -100,34 +138,66 @@ export const idlService = IDL.Service({
       [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
       ['query'],
     ),
+  'getCallerSubscriptions' : IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getFeaturedVideos' : IDL.Func([], [IDL.Vec(Video)], ['query']),
+  'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
   'getPlatformStats' : IDL.Func(
       [],
       [
         IDL.Record({
+          'bannedUsers' : IDL.Nat,
           'totalReports' : IDL.Nat,
           'totalVideos' : IDL.Nat,
           'totalUsers' : IDL.Nat,
+          'suspendedUsers' : IDL.Nat,
         }),
       ],
       ['query'],
     ),
   'getTrendingVideos' : IDL.Func([], [IDL.Vec(Video)], ['query']),
+  'getUserPlaylists' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(PlaylistView)],
+      ['query'],
+    ),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getUserStatistics' : IDL.Func(
+      [IDL.Principal],
+      [
+        IDL.Record({
+          'accountCreationDate' : IDL.Opt(Time),
+          'totalVideos' : IDL.Nat,
+          'subscriberCount' : IDL.Nat,
+        }),
+      ],
+      ['query'],
+    ),
+  'getUserStatus' : IDL.Func([IDL.Principal], [SuspensionStatus], ['query']),
+  'getVideo' : IDL.Func([IDL.Text], [IDL.Opt(Video)], ['query']),
+  'getVideoComments' : IDL.Func([IDL.Text], [IDL.Vec(Comment)], ['query']),
   'getVideoReports' : IDL.Func([IDL.Text], [IDL.Vec(Report)], ['query']),
   'getVideosByCategory' : IDL.Func([IDL.Text], [IDL.Vec(Video)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'likeVideo' : IDL.Func([IDL.Text], [IDL.Nat], []),
   'removeReportedVideo' : IDL.Func([IDL.Text], [], []),
   'reportVideo' : IDL.Func([IDL.Text, IDL.Text], [], []),
+  'restoreUser' : IDL.Func([IDL.Principal], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'searchUsers' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
+      ['query'],
+    ),
   'searchVideos' : IDL.Func([IDL.Text], [IDL.Vec(Video)], ['query']),
   'subscribeToChannel' : IDL.Func([IDL.Principal], [], []),
+  'suspendUser' : IDL.Func([IDL.Principal, IDL.Text], [], []),
+  'updatePlatformSettings' : IDL.Func([PlatformSettings], [], []),
   'uploadVideo' : IDL.Func(
       [
         IDL.Text,
@@ -168,6 +238,14 @@ export const idlFactory = ({ IDL }) => {
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
+  const AdminAction = IDL.Record({
+    'id' : IDL.Nat,
+    'admin' : IDL.Principal,
+    'actionType' : IDL.Text,
+    'timestamp' : Time,
+    'details' : IDL.Text,
+    'affectedResource' : IDL.Text,
+  });
   const Report = IDL.Record({
     'timestamp' : Time,
     'reporter' : IDL.Principal,
@@ -184,13 +262,34 @@ export const idlFactory = ({ IDL }) => {
   const Video = IDL.Record({
     'id' : IDL.Text,
     'title' : IDL.Text,
+    'featured' : IDL.Bool,
     'thumbnail' : IDL.Opt(ExternalBlob),
     'views' : IDL.Nat,
+    'hidden' : IDL.Bool,
     'description' : IDL.Text,
     'videoFile' : ExternalBlob,
     'category' : IDL.Text,
     'uploader' : IDL.Principal,
     'uploadTime' : Time,
+  });
+  const PlatformSettings = IDL.Record({
+    'maxVideoSizeMB' : IDL.Nat,
+    'allowedCategories' : IDL.Vec(IDL.Text),
+    'moderationPolicies' : IDL.Text,
+  });
+  const PlaylistView = IDL.Record({
+    'name' : IDL.Text,
+    'videos' : IDL.Vec(IDL.Text),
+  });
+  const SuspensionStatus = IDL.Record({
+    'status' : IDL.Variant({
+      'active' : IDL.Null,
+      'banned' : IDL.Null,
+      'suspended' : IDL.Null,
+    }),
+    'admin' : IDL.Principal,
+    'timestamp' : Time,
+    'reason' : IDL.Text,
   });
   
   return IDL.Service({
@@ -224,9 +323,18 @@ export const idlFactory = ({ IDL }) => {
     'addComment' : IDL.Func([IDL.Text, IDL.Text], [Comment], []),
     'addVideoToPlaylist' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'banUser' : IDL.Func([IDL.Principal, IDL.Text], [], []),
+    'bulkFeatureVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+    'bulkHideVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+    'bulkRemoveVideos' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
     'createPlaylist' : IDL.Func([IDL.Text], [], []),
     'deleteComment' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'deleteVideo' : IDL.Func([IDL.Text], [], []),
+    'getAdminActivityLog' : IDL.Func(
+        [IDL.Nat],
+        [IDL.Vec(AdminAction)],
+        ['query'],
+      ),
     'getAllReports' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(Report)))],
@@ -237,34 +345,70 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
         ['query'],
       ),
+    'getCallerSubscriptions' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Principal)],
+        ['query'],
+      ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getFeaturedVideos' : IDL.Func([], [IDL.Vec(Video)], ['query']),
+    'getPlatformSettings' : IDL.Func([], [PlatformSettings], ['query']),
     'getPlatformStats' : IDL.Func(
         [],
         [
           IDL.Record({
+            'bannedUsers' : IDL.Nat,
             'totalReports' : IDL.Nat,
             'totalVideos' : IDL.Nat,
             'totalUsers' : IDL.Nat,
+            'suspendedUsers' : IDL.Nat,
           }),
         ],
         ['query'],
       ),
     'getTrendingVideos' : IDL.Func([], [IDL.Vec(Video)], ['query']),
+    'getUserPlaylists' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(PlaylistView)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getUserStatistics' : IDL.Func(
+        [IDL.Principal],
+        [
+          IDL.Record({
+            'accountCreationDate' : IDL.Opt(Time),
+            'totalVideos' : IDL.Nat,
+            'subscriberCount' : IDL.Nat,
+          }),
+        ],
+        ['query'],
+      ),
+    'getUserStatus' : IDL.Func([IDL.Principal], [SuspensionStatus], ['query']),
+    'getVideo' : IDL.Func([IDL.Text], [IDL.Opt(Video)], ['query']),
+    'getVideoComments' : IDL.Func([IDL.Text], [IDL.Vec(Comment)], ['query']),
     'getVideoReports' : IDL.Func([IDL.Text], [IDL.Vec(Report)], ['query']),
     'getVideosByCategory' : IDL.Func([IDL.Text], [IDL.Vec(Video)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'likeVideo' : IDL.Func([IDL.Text], [IDL.Nat], []),
     'removeReportedVideo' : IDL.Func([IDL.Text], [], []),
     'reportVideo' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'restoreUser' : IDL.Func([IDL.Principal], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'searchUsers' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
+        ['query'],
+      ),
     'searchVideos' : IDL.Func([IDL.Text], [IDL.Vec(Video)], ['query']),
     'subscribeToChannel' : IDL.Func([IDL.Principal], [], []),
+    'suspendUser' : IDL.Func([IDL.Principal, IDL.Text], [], []),
+    'updatePlatformSettings' : IDL.Func([PlatformSettings], [], []),
     'uploadVideo' : IDL.Func(
         [
           IDL.Text,
